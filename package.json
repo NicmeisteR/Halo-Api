@@ -1,0 +1,21 @@
+{
+  "name": "halo-api",
+  "version": "1.0.0",
+  "description": "Halo 5 API made easy.",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "node-essentials": "^1.2.6",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node client.js",
+    "start": "node server.js"
+  },
+  "author": "Nicolaas Nel",
+  "license": "ISC"
+}
