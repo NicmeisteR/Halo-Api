@@ -47,3 +47,17 @@ Simply do a REST API POST call with the below body to
   "TotalTimePlayed": "P12DT8H3M33.5068685S"
 }
 ```
+
+# Setup
+
+## Build
+Run
+> npm run-script build
+
+## Start
+Run 
+> npm start
+
+## Test
+Run
+> npm test

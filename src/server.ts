@@ -5,11 +5,12 @@
 // ██║██║ ╚═╝ ██║██║     ╚██████╔╝██║  ██║   ██║   ███████║
 // ╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝
 //                                                         
-const express = require('express');
+import express = require('express');
 const node = require('node-essentials');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-require('dotenv').config()
+require('dotenv').config({ path: require('find-config')('.env') });
+import { Player } from './models/player';
 
 // ███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
 // ██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
@@ -18,8 +19,8 @@ require('dotenv').config()
 // ██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
 // ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 //             
-async function get(gamertag, token){
-  let player;
+async function get(gamertag: string, token: string){
+  let player : any;
   try {
     player = await node.get(`https://www.haloapi.com/stats/h5/servicerecords/arena?players=${gamertag}`,["ocp-apim-subscription-key", token]).then(console.log("Retrieved: Player"));
     
@@ -27,46 +28,44 @@ async function get(gamertag, token){
     console.log(error);
   }
   finally{
-    return new Promise((resolve, reject) => {
+    return new Promise<Player>((resolve, reject) => {
       player = JSON.parse(player);
-      player = player.Results[0];
-      console.log(player.Id);
       return resolve(player);
     });
   }
 }
 
-async function stats(player) {
+async function stats(player: Player) {
   
   let root = {
-     Gamertag: player.Result.PlayerId.Gamertag,
-     Xp: player.Result.Xp,
-     SpartanRank:player.Result.SpartanRank,
+     Gamertag: player.Results[0].Result.PlayerId.Gamertag,
+     Xp: player.Results[0].Result.Xp,
+     SpartanRank: player.Results[0].Result.SpartanRank,
      HighestCsrAttained: {
-      Tier: player.Result.ArenaStats.HighestCsrAttained.Tier,
-      DesignationId:player.Result.ArenaStats.HighestCsrAttained.DesignationId,
-      Csr: player.Result.ArenaStats.HighestCsrAttained.Csr,
-      PercentToNextTier: player.Result.ArenaStats.HighestCsrAttained.PercentToNextTier,
-      Rank: player.Result.ArenaStats.HighestCsrAttained.Rank,
+      Tier: player.Results[0].Result.ArenaStats.HighestCsrAttained?.Tier,
+      DesignationId: player.Results[0].Result.ArenaStats.HighestCsrAttained?.DesignationId,
+      Csr: player.Results[0].Result.ArenaStats.HighestCsrAttained?.Csr,
+      PercentToNextTier: player.Results[0].Result.ArenaStats.HighestCsrAttained?.PercentToNextTier,
+      Rank: player.Results[0].Result.ArenaStats.HighestCsrAttained?.Rank,
      },
      Stats: {
-      TotalKills:player.Result.ArenaStats.TotalKills,
-      TotalHeadshots:player.Result.ArenaStats.TotalHeadshots,
-      TotalMeleeKills: player.Result.ArenaStats.TotalMeleeKills,
-      TotalAssassinations: player.Result.ArenaStats.TotalAssassinations,
-      TotalGroundPoundKills: player.Result.ArenaStats.TotalGroundPoundKills,
-      TotalShoulderBashKills: player.Result.ArenaStats.TotalShoulderBashKills,
-      TotalPowerWeaponKills: player.Result.ArenaStats.TotalPowerWeaponKills,
-      TotalDeaths: player.Result.ArenaStats.TotalDeaths,
-      TotalAssists: player.Result.ArenaStats.TotalAssists,
-      TotalGamesCompleted: player.Result.ArenaStats.TotalGamesCompleted,
-      TotalGamesWon: player.Result.ArenaStats.TotalGamesWon,
-      TotalGamesLost: player.Result.ArenaStats.TotalGamesLost,
-      TotalGamesTied: player.Result.ArenaStats.TotalGamesTied,
-      TotalGrenadeKills: player.Result.ArenaStats.TotalGrenadeKills,
-      TotalSpartanKills: player.Result.ArenaStats.TotalSpartanKills,
+      TotalKills: player.Results[0].Result.ArenaStats.TotalKills,
+      TotalHeadshots: player.Results[0].Result.ArenaStats.TotalHeadshots,
+      TotalMeleeKills: player.Results[0].Result.ArenaStats.TotalMeleeKills,
+      TotalAssassinations: player.Results[0].Result.ArenaStats.TotalAssassinations,
+      TotalGroundPoundKills: player.Results[0].Result.ArenaStats.TotalGroundPoundKills,
+      TotalShoulderBashKills: player.Results[0].Result.ArenaStats.TotalShoulderBashKills,
+      TotalPowerWeaponKills: player.Results[0].Result.ArenaStats.TotalPowerWeaponKills,
+      TotalDeaths: player.Results[0].Result.ArenaStats.TotalDeaths,
+      TotalAssists: player.Results[0].Result.ArenaStats.TotalAssists,
+      TotalGamesCompleted: player.Results[0].Result.ArenaStats.TotalGamesCompleted,
+      TotalGamesWon: player.Results[0].Result.ArenaStats.TotalGamesWon,
+      TotalGamesLost: player.Results[0].Result.ArenaStats.TotalGamesLost,
+      TotalGamesTied: player.Results[0].Result.ArenaStats.TotalGamesTied,
+      TotalGrenadeKills: player.Results[0].Result.ArenaStats.TotalGrenadeKills,
+      TotalSpartanKills: player.Results[0].Result.ArenaStats.TotalSpartanKills,
      },
-     TotalTimePlayed: player.Result.ArenaStats.TotalTimePlayed,
+     TotalTimePlayed: player.Results[0].Result.ArenaStats.TotalTimePlayed,
   };
 
   return new Promise((resolve, reject) => {
@@ -89,21 +88,23 @@ function start(){
       'Twitter': 'https://twitter.com/FinalNecessity'
     });
 
-    let player = await get(request.body.gamertag, request.body.token);
+    let playerObject: Player = await get(request.body.gamertag, request.body.token);
+    let responseObject: any;
 
     try {
-      test = await stats(player);
+        responseObject = await stats(playerObject);
     }
     catch (error) {
       console.log(error);
     }
     finally{
-      response.end(JSON.stringify(test))
+      response.end(JSON.stringify(responseObject))
     }
 
   })
   app.listen(process.env.PORT, () => console.log(`API now available on http://localhost:${process.env.PORT}`));
 }
 
-let app = express();
+// let app = express();
+const app: express.Application = express();
 start();

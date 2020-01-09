@@ -1,9 +1,9 @@
-var request = require("request");
-require('dotenv').config()
+const request = require("request");
+require('dotenv').config({ path: require('find-config')('.env') });
 
 var options = {
     method: 'POST',
-    url: 'https://haloapi.nicmeister.cloud/',
+    url: 'http://localhost:8001',
     headers: {
         'content-type': 'application/json'
     },
