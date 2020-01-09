@@ -17,7 +17,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝
 // Imports                                                
 const express = require("express");
-const haloapi_1 = require("./functions/haloapi");
 const helpers_1 = require("./functions/helpers");
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -41,10 +40,11 @@ function start() {
             'Support-Development': 'https://ko-fi.com/nicmeister',
             'Twitter': 'https://twitter.com/FinalNecessity'
         });
-        let playerObject = yield helpers_1.get(request.body.gamertag, request.body.token);
+        let query = yield helpers_1.selector(request.body.query, request.body.gamertag);
+        let playerObject = yield helpers_1.get(request.body.token, query);
         let responseObject;
         try {
-            responseObject = yield haloapi_1.stats(playerObject);
+            responseObject = yield query.function(playerObject, request.body.token);
         }
         catch (error) {
             console.log(error);

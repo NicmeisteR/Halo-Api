@@ -7,8 +7,7 @@
 // Imports                                                
 import express = require('express');
 import { Player } from './models/player';
-import { stats } from './functions/haloapi';
-import { get } from './functions/helpers';
+import { get, selector } from './functions/helpers';
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config({ path: require('find-config')('.env') });
@@ -20,7 +19,7 @@ require('dotenv').config({ path: require('find-config')('.env') });
 // ███████║███████╗██║  ██║ ╚████╔╝ ███████╗██║  ██║
 // ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝
 // Server                                             
-function start(){
+function start() {
 
   app.use(cors());
   // Configuring body parser middleware
@@ -29,22 +28,23 @@ function start(){
 
   app.post('/', async (request, response) => {
     response.writeHead(200, {
-      'Content-Type': 'text/json', 
+      'Content-Type': 'text/json',
       'Developer': 'Nicolaas Nel (NicmeisteR)',
-      'Support-Development' : 'https://ko-fi.com/nicmeister',
+      'Support-Development': 'https://ko-fi.com/nicmeister',
       'Twitter': 'https://twitter.com/FinalNecessity'
     });
 
-    let playerObject: Player = await get(request.body.gamertag, request.body.token);
+    let query = await selector(request.body.query, request.body.gamertag);
+    let playerObject: Player = await get(request.body.token, query);
     let responseObject: any;
 
     try {
-        responseObject = await stats(playerObject);
+      responseObject = await query.function(playerObject, request.body.token);
     }
     catch (error) {
       console.log(error);
     }
-    finally{
+    finally {
       response.end(JSON.stringify(responseObject))
     }
 
