@@ -52,7 +52,7 @@ Simply do a REST API POST call with the below body to
 
 ## Build
 Run
-> npm run-script build
+> npm run build
 
 ## Start
 Run 

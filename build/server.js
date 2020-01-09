@@ -15,74 +15,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ██║██║╚██╔╝██║██╔═══╝ ██║   ██║██╔══██╗   ██║   ╚════██║
 // ██║██║ ╚═╝ ██║██║     ╚██████╔╝██║  ██║   ██║   ███████║
 // ╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝
-//                                                         
+// Imports                                                
 const express = require("express");
-const node = require('node-essentials');
+const haloapi_1 = require("./functions/haloapi");
+const helpers_1 = require("./functions/helpers");
 const bodyParser = require('body-parser');
 const cors = require('cors');
-require('dotenv').config();
-// ███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
-// ██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
-// █████╗  ██║   ██║██╔██╗ ██║██║        ██║   ██║██║   ██║██╔██╗ ██║███████╗
-// ██╔══╝  ██║   ██║██║╚██╗██║██║        ██║   ██║██║   ██║██║╚██╗██║╚════██║
-// ██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
-// ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
-//             
-function get(gamertag, token) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let player;
-        try {
-            player = yield node.get(`https://www.haloapi.com/stats/h5/servicerecords/arena?players=${gamertag}`, ["ocp-apim-subscription-key", token]).then(console.log("Retrieved: Player"));
-        }
-        catch (error) {
-            console.log(error);
-        }
-        finally {
-            return new Promise((resolve, reject) => {
-                player = JSON.parse(player);
-                return resolve(player);
-            });
-        }
-    });
-}
-function stats(player) {
-    var _a, _b, _c, _d, _e;
-    return __awaiter(this, void 0, void 0, function* () {
-        let root = {
-            Gamertag: player.Results[0].Result.PlayerId.Gamertag,
-            Xp: player.Results[0].Result.Xp,
-            SpartanRank: player.Results[0].Result.SpartanRank,
-            HighestCsrAttained: {
-                Tier: (_a = player.Results[0].Result.ArenaStats.HighestCsrAttained) === null || _a === void 0 ? void 0 : _a.Tier,
-                DesignationId: (_b = player.Results[0].Result.ArenaStats.HighestCsrAttained) === null || _b === void 0 ? void 0 : _b.DesignationId,
-                Csr: (_c = player.Results[0].Result.ArenaStats.HighestCsrAttained) === null || _c === void 0 ? void 0 : _c.Csr,
-                PercentToNextTier: (_d = player.Results[0].Result.ArenaStats.HighestCsrAttained) === null || _d === void 0 ? void 0 : _d.PercentToNextTier,
-                Rank: (_e = player.Results[0].Result.ArenaStats.HighestCsrAttained) === null || _e === void 0 ? void 0 : _e.Rank,
-            },
-            Stats: {
-                TotalKills: player.Results[0].Result.ArenaStats.TotalKills,
-                TotalHeadshots: player.Results[0].Result.ArenaStats.TotalHeadshots,
-                TotalMeleeKills: player.Results[0].Result.ArenaStats.TotalMeleeKills,
-                TotalAssassinations: player.Results[0].Result.ArenaStats.TotalAssassinations,
-                TotalGroundPoundKills: player.Results[0].Result.ArenaStats.TotalGroundPoundKills,
-                TotalShoulderBashKills: player.Results[0].Result.ArenaStats.TotalShoulderBashKills,
-                TotalPowerWeaponKills: player.Results[0].Result.ArenaStats.TotalPowerWeaponKills,
-                TotalDeaths: player.Results[0].Result.ArenaStats.TotalDeaths,
-                TotalAssists: player.Results[0].Result.ArenaStats.TotalAssists,
-                TotalGamesCompleted: player.Results[0].Result.ArenaStats.TotalGamesCompleted,
-                TotalGamesWon: player.Results[0].Result.ArenaStats.TotalGamesWon,
-                TotalGamesLost: player.Results[0].Result.ArenaStats.TotalGamesLost,
-                TotalGamesTied: player.Results[0].Result.ArenaStats.TotalGamesTied,
-                TotalGrenadeKills: player.Results[0].Result.ArenaStats.TotalGrenadeKills,
-                TotalSpartanKills: player.Results[0].Result.ArenaStats.TotalSpartanKills,
-            },
-            TotalTimePlayed: player.Results[0].Result.ArenaStats.TotalTimePlayed,
-        };
-        return new Promise((resolve, reject) => {
-            resolve(root);
-        });
-    });
-}
+require('dotenv').config({ path: require('find-config')('.env') });
+// ███████╗███████╗██████╗ ██╗   ██╗███████╗██████╗ 
+// ██╔════╝██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗
+// ███████╗█████╗  ██████╔╝██║   ██║█████╗  ██████╔╝
+// ╚════██║██╔══╝  ██╔══██╗╚██╗ ██╔╝██╔══╝  ██╔══██╗
+// ███████║███████╗██║  ██║ ╚████╔╝ ███████╗██║  ██║
+// ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝
+// Server                                             
 function start() {
     app.use(cors());
     // Configuring body parser middleware
@@ -95,10 +41,10 @@ function start() {
             'Support-Development': 'https://ko-fi.com/nicmeister',
             'Twitter': 'https://twitter.com/FinalNecessity'
         });
-        let playerObject = yield get(request.body.gamertag, request.body.token);
+        let playerObject = yield helpers_1.get(request.body.gamertag, request.body.token);
         let responseObject;
         try {
-            responseObject = yield stats(playerObject);
+            responseObject = yield haloapi_1.stats(playerObject);
         }
         catch (error) {
             console.log(error);
