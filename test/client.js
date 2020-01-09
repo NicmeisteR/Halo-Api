@@ -1,13 +1,29 @@
 const request = require("request");
 require('dotenv').config({ path: require('find-config')('.env') });
 
+//  ██████╗ ██╗   ██╗███████╗██████╗ ██╗   ██╗    ██╗     ██╗███████╗████████╗
+// ██╔═══██╗██║   ██║██╔════╝██╔══██╗╚██╗ ██╔╝    ██║     ██║██╔════╝╚══██╔══╝
+// ██║   ██║██║   ██║█████╗  ██████╔╝ ╚████╔╝     ██║     ██║███████╗   ██║   
+// ██║▄▄ ██║██║   ██║██╔══╝  ██╔══██╗  ╚██╔╝      ██║     ██║╚════██║   ██║   
+// ╚██████╔╝╚██████╔╝███████╗██║  ██║   ██║       ███████╗██║███████║   ██║   
+//  ╚══▀▀═╝  ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝       ╚══════╝╚═╝╚══════╝   ╚═╝   
+/*
+Arena
+Ranks
+*/
+const query = "Ranks";
+
 var options = {
     method: 'POST',
     url: 'http://localhost:8001',
     headers: {
         'content-type': 'application/json'
     },
-    body: { gamertag: 'Final Necessity', token: process.env.API_KEY },
+    body: { 
+        gamertag: 'May Hamn', 
+        token: process.env.API_KEY ,
+        query: query
+    },
     json: true
 };
 
