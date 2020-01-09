@@ -74,7 +74,7 @@ function ranks(player, token) {
         let playerPlaylist = player.Results[0].Result.ArenaStats.ArenaPlaylistStats;
         let playlistList = yield helpers_1.get(token, query.playlists);
         let csrDesignation = yield helpers_1.get(token, query.csr);
-        // let playlistName = getPlaylistName(playerPlaylist, playlistList, csrDesignation) 
+        let playlistName = yield helpers_1.getPlaylistName(playerPlaylist, playlistList, csrDesignation);
         let root = {
             Gamertag: player.Results[0].Result.PlayerId.Gamertag,
             Xp: player.Results[0].Result.Xp,
@@ -106,7 +106,7 @@ function ranks(player, token) {
             TotalTimePlayed: player.Results[0].Result.ArenaStats.TotalTimePlayed,
         };
         return new Promise((resolve, reject) => {
-            resolve(root);
+            resolve(playlistName);
         });
     });
 }

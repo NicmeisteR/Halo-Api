@@ -11,7 +11,7 @@ require('dotenv').config({ path: require('find-config')('.env') });
 Arena
 Ranks
 */
-const query = "Arena";
+const query = "Ranks";
 
 var options = {
     method: 'POST',
@@ -20,7 +20,7 @@ var options = {
         'content-type': 'application/json'
     },
     body: { 
-        gamertag: 'Final Necessity', 
+        gamertag: 'May Hamn', 
         token: process.env.API_KEY ,
         query: query
     },

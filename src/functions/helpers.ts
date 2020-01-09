@@ -21,30 +21,16 @@ import { arena, ranks } from '../functions/haloapi';
 export async function get(token: string, query: Query) {
     let player: any;
     try {
-        player = await node.get(query.url, ["ocp-apim-subscription-key", token]).then(console.log("Retrieved: Player"));
+        player = await node.get(query.url, ["ocp-apim-subscription-key", token]).then(console.log(`Retrieved: ${query.query}`));
 
     } catch (error) {
         console.log(error);
     }
     finally {
-        if(query.query === "playlists"){
-            return new Promise<Playlists>((resolve, reject) => {
-                player = JSON.parse(player);
-                return resolve(player);
-            });
-        }
-        else if(query.query === "csr"){
-            return new Promise<Playlists>((resolve, reject) => {
-                player = JSON.parse(player);
-                return resolve(player);
-            });
-        }
-        else if(query.query === "arena"){
-            return new Promise<Player>((resolve, reject) => {
-                player = JSON.parse(player);
-                return resolve(player);
-            });
-        }
+        return new Promise<any>((resolve, reject) => {
+            player = JSON.parse(player);
+            return resolve(player);
+        });
     }
 }
 
@@ -81,8 +67,8 @@ export async function selector(query: string, gamertag: string) {
 
 export async function getPlaylistName(playerPlaylist: Array<ArenaPlaylistStats> | undefined, playlistList: Array<Playlists>, csrDesignation: any) {
 
-    if(playerPlaylist === undefined){
-        return new Promise( resolve => {
+    if (playerPlaylist === undefined) {
+        return new Promise(resolve => {
             resolve("Not Placement Matches Played");
         });
     }
@@ -130,12 +116,12 @@ export async function getPlaylistName(playerPlaylist: Array<ArenaPlaylistStats> 
         });
     });
 
-    return new Promise( resolve => {
+    return new Promise(resolve => {
         resolve(playlistNames);
     });
 }
 
-function parseTime(time: any){
+function parseTime(time: any) {
     const DurationRegex = /(-)?P(?:([.,\d]+)Y)?(?:([.,\d]+)M)?(?:([.,\d]+)W)?(?:([.,\d]+)D)?(?:T(?:([.,\d]+)H)?(?:([.,\d]+)M)?(?:([.,\d]+)S)?)?/;
     let matches = time.match(DurationRegex);
 
@@ -149,4 +135,4 @@ function parseTime(time: any){
         minutes: matches[7] === undefined ? 0 : matches[7],
         seconds: matches[8] === undefined ? 0 : matches[8]
     };
-  }
+}

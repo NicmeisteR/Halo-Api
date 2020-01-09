@@ -73,7 +73,7 @@ export async function ranks(player: Player, token: string) {
     let playlistList = await get(token, query.playlists);
     let csrDesignation = await get(token, query.csr);
 
-    let playlistName = getPlaylistName(playerPlaylist, playlistList, csrDesignation) 
+    let playlistName = await getPlaylistName(playerPlaylist, playlistList, csrDesignation) 
 
     let root = {
         Gamertag: player.Results[0].Result.PlayerId.Gamertag,
@@ -107,7 +107,7 @@ export async function ranks(player: Player, token: string) {
     };
 
     return new Promise((resolve, reject) => {
-        resolve(root);
+        resolve(playlistName);
     });
 }
 

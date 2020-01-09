@@ -35,7 +35,7 @@ function start() {
     });
 
     let query = await selector(request.body.query, request.body.gamertag);
-    let playerObject: Player = await get(request.body.token, query);
+    let playerObject = await get(request.body.token, query);
     let responseObject: any;
 
     try {

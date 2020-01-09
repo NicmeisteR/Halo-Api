@@ -29,30 +29,16 @@ function get(token, query) {
     return __awaiter(this, void 0, void 0, function* () {
         let player;
         try {
-            player = yield node.get(query.url, ["ocp-apim-subscription-key", token]).then(console.log("Retrieved: Player"));
+            player = yield node.get(query.url, ["ocp-apim-subscription-key", token]).then(console.log(`Retrieved: ${query.query}`));
         }
         catch (error) {
             console.log(error);
         }
         finally {
-            if (query.query === "playlists") {
-                return new Promise((resolve, reject) => {
-                    player = JSON.parse(player);
-                    return resolve(player);
-                });
-            }
-            else if (query.query === "csr") {
-                return new Promise((resolve, reject) => {
-                    player = JSON.parse(player);
-                    return resolve(player);
-                });
-            }
-            else if (query.query === "arena") {
-                return new Promise((resolve, reject) => {
-                    player = JSON.parse(player);
-                    return resolve(player);
-                });
-            }
+            return new Promise((resolve, reject) => {
+                player = JSON.parse(player);
+                return resolve(player);
+            });
         }
     });
 }
