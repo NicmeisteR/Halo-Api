@@ -118,7 +118,10 @@ export async function ranks(player: Player, token: string) {
     });
 }
 
-export async function getXpBreakdown(player: any){
+export async function xp(player: any){
+    
+    player = player.Results[0].Result;
+
     //build our reply object
     let spartanRank = player.SpartanRank;
 

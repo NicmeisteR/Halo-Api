@@ -64,6 +64,15 @@ function selector(query, gamertag) {
                 });
             });
         }
+        else if (query.toLowerCase() === "xp") {
+            return new Promise(resolve => {
+                return resolve({
+                    "url": url,
+                    "query": query,
+                    "function": haloapi_1.xp
+                });
+            });
+        }
         return new Promise(resolve => {
             return resolve({
                 "url": url,

@@ -18,7 +18,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Imports                                                
 const express = require("express");
 const helpers_1 = require("./functions/helpers");
-const haloapi_1 = require("./functions/haloapi");
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config({ path: require('find-config')('.env') });
@@ -46,26 +45,6 @@ function start() {
         let responseObject;
         try {
             responseObject = yield query.function(playerObject, request.body.token);
-        }
-        catch (error) {
-            console.log(error);
-        }
-        finally {
-            response.end(JSON.stringify(responseObject));
-        }
-    }));
-    app.post('/xp', (request, response) => __awaiter(this, void 0, void 0, function* () {
-        response.writeHead(200, {
-            'Content-Type': 'text/json',
-            'Developer': 'Nicolaas Nel (NicmeisteR)',
-            'Support-Development': 'https://ko-fi.com/nicmeister',
-            'Twitter': 'https://twitter.com/FinalNecessity'
-        });
-        let query = yield helpers_1.selector(request.body.query, request.body.gamertag);
-        let playerObject = yield helpers_1.get(request.body.token, query);
-        let responseObject;
-        try {
-            responseObject = yield haloapi_1.getXpBreakdown(playerObject.Results[0].Result);
         }
         catch (error) {
             console.log(error);

@@ -9,7 +9,7 @@ const node = require('node-essentials');
 import { Player, ArenaPlaylistStats } from '../models/player';
 import { Query } from '../models/query';
 import { Playlists } from '../models/playlists';
-import { arena, ranks } from '../functions/haloapi';
+import { arena, ranks, xp } from '../functions/haloapi';
 
 // ███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
 // ██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
@@ -52,6 +52,15 @@ export async function selector(query: string, gamertag: string) {
                 "url": url,
                 "query": query,
                 "function": ranks
+            });
+        });
+    }
+    else if (query.toLowerCase() === "xp") {
+        return new Promise<Query>(resolve => {
+            return resolve({
+                "url": url,
+                "query": query,
+                "function": xp
             });
         });
     }

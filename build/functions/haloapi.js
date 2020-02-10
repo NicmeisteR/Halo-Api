@@ -118,8 +118,9 @@ function ranks(player, token) {
     });
 }
 exports.ranks = ranks;
-function getXpBreakdown(player) {
+function xp(player) {
     return __awaiter(this, void 0, void 0, function* () {
+        player = player.Results[0].Result;
         //build our reply object
         let spartanRank = player.SpartanRank;
         //XP
@@ -160,7 +161,7 @@ function getXpBreakdown(player) {
         });
     });
 }
-exports.getXpBreakdown = getXpBreakdown;
+exports.xp = xp;
 // function getPlayer(gamertag){
 //     this.haloApi.getPlayer(gamertag).subscribe((res : res)=>{
 //       this.player = res.Results[0];
