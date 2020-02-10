@@ -119,7 +119,7 @@ export async function ranks(player: Player, token: string) {
 }
 
 export async function xp(player: any){
-    
+
     player = player.Results[0].Result;
 
     //build our reply object
@@ -148,7 +148,7 @@ export async function xp(player: any){
     
     // OBJECT
     let normalStats = {
-        "Gamertag": player.Gamertag,
+        "Gamertag": player.PlayerId.Gamertag,
         "SpartanRank": spartanRank,
         "XpBreakdown": {
             "Current": xpCurrent,
