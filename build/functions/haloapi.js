@@ -122,7 +122,6 @@ function getXpBreakdown(player) {
     return __awaiter(this, void 0, void 0, function* () {
         //build our reply object
         let spartanRank = player.SpartanRank;
-        console.log(player);
         //XP
         let xpCur = player.Xp;
         let xpCurrent = helpers_1.numberFormat(player.Xp);
@@ -143,14 +142,14 @@ function getXpBreakdown(player) {
         let normalStats = {
             "Gamertag": player.Gamertag,
             "SpartanRank": spartanRank,
-            "Breakdown": {
-                "CurrentXp": xpCurrent,
-                "XpLeft": left,
-                "GoalXp": goal,
+            "XpBreakdown": {
+                "Current": xpCurrent,
+                "Left": left,
+                "Goal": goal,
                 "Percentage": percentage,
-                "XpPerDay": helpers_1.numDecFormat(((50000000 - xpCur) / Difference_In_Days)),
+                "PerDay": helpers_1.numDecFormat(((50000000 - xpCur) / Difference_In_Days)),
             },
-            "Matches": {
+            "MatchesLeft": {
                 "Arena": arena,
                 "Warzone": warzone,
                 "Infection": infection
