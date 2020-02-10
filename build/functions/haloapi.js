@@ -56,6 +56,13 @@ function arena(player) {
     });
 }
 exports.arena = arena;
+/**
+ * This returns the players ranks.
+ *
+ * @param {Player} player
+ * @param {string} token
+ * @returns playlistName
+ */
 function ranks(player, token) {
     var _a, _b, _c, _d, _e;
     return __awaiter(this, void 0, void 0, function* () {
@@ -111,6 +118,50 @@ function ranks(player, token) {
     });
 }
 exports.ranks = ranks;
+function getXpBreakdown(player) {
+    return __awaiter(this, void 0, void 0, function* () {
+        //build our reply object
+        let spartanRank = player.SpartanRank;
+        console.log(player);
+        //XP
+        let xpCur = player.Xp;
+        let xpCurrent = helpers_1.numberFormat(player.Xp);
+        //Xp functions
+        let goal = helpers_1.numberFormat(50000000);
+        let percentage = ((xpCur / 50000000) * 100).toFixed(0) + "%";
+        let left = helpers_1.numberFormat(50000000 - xpCur);
+        let warzone = helpers_1.numDecFormat((50000000 - xpCur) / 12000);
+        let arena = helpers_1.numDecFormat((50000000 - xpCur) / 1800);
+        let infection = helpers_1.numDecFormat((50000000 - xpCur) / 5000);
+        let dateNow = new Date();
+        const dateDone = new Date("11/15/2020");
+        // To calculate the time difference of two dates 
+        let Difference_In_Time = dateDone.getTime() - dateNow.getTime();
+        // To calculate the no. of days between two dates 
+        let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+        // OBJECT
+        let normalStats = {
+            "Gamertag": player.Gamertag,
+            "SpartanRank": spartanRank,
+            "Breakdown": {
+                "CurrentXp": xpCurrent,
+                "XpLeft": left,
+                "GoalXp": goal,
+                "Percentage": percentage,
+                "XpPerDay": helpers_1.numDecFormat(((50000000 - xpCur) / Difference_In_Days)),
+            },
+            "Matches": {
+                "Arena": arena,
+                "Warzone": warzone,
+                "Infection": infection
+            }
+        };
+        return new Promise((resolve, reject) => {
+            resolve(normalStats);
+        });
+    });
+}
+exports.getXpBreakdown = getXpBreakdown;
 // function getPlayer(gamertag){
 //     this.haloApi.getPlayer(gamertag).subscribe((res : res)=>{
 //       this.player = res.Results[0];

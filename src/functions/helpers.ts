@@ -136,3 +136,19 @@ function parseTime(time: any) {
         seconds: matches[8] === undefined ? 0 : matches[8]
     };
 }
+
+export function numberFormat(x: any) {
+    if(x === undefined){
+        return 0;
+    }
+    else{
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+}
+
+export function numDecFormat(x: any) {
+    let reformat = x.toFixed(0);
+    let parts = reformat.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    return parts.join(".");
+}

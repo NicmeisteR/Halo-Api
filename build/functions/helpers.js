@@ -140,3 +140,19 @@ function parseTime(time) {
         seconds: matches[8] === undefined ? 0 : matches[8]
     };
 }
+function numberFormat(x) {
+    if (x === undefined) {
+        return 0;
+    }
+    else {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+}
+exports.numberFormat = numberFormat;
+function numDecFormat(x) {
+    let reformat = x.toFixed(0);
+    let parts = reformat.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    return parts.join(".");
+}
+exports.numDecFormat = numDecFormat;

@@ -6,7 +6,7 @@
 // ╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝
 // Imports
 import { Player } from '../models/player';
-import { get, getPlaylistName } from '../functions/helpers';
+import { get, getPlaylistName, numberFormat, numDecFormat } from '../functions/helpers';
 import { Query } from '../models/query';
 
 // ███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
@@ -54,6 +54,13 @@ export async function arena(player: Player) {
     });
 }
 
+/**
+ * This returns the players ranks.
+ *
+ * @param {Player} player
+ * @param {string} token
+ * @returns playlistName
+ */
 export async function ranks(player: Player, token: string) {
 
     let query = {
@@ -111,6 +118,53 @@ export async function ranks(player: Player, token: string) {
     });
 }
 
+export async function getXpBreakdown(player: any){
+    //build our reply object
+    let spartanRank = player.SpartanRank;
+
+    //XP
+    let xpCur = player.Xp;
+    let xpCurrent = numberFormat(player.Xp);
+
+    //Xp functions
+    let goal = numberFormat(50000000);
+    let percentage = ((xpCur/50000000)*100).toFixed(0) +"%";
+
+    let left = numberFormat(50000000 - xpCur);
+    let warzone = numDecFormat((50000000 - xpCur)/12000);
+    let arena = numDecFormat((50000000 - xpCur)/1800);
+    let infection = numDecFormat((50000000 - xpCur)/5000);
+    let dateNow = new Date(); 
+    const dateDone = new Date("11/15/2020"); 
+
+    // To calculate the time difference of two dates 
+    let Difference_In_Time = dateDone.getTime() - dateNow.getTime(); 
+    
+    // To calculate the no. of days between two dates 
+    let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
+    
+    // OBJECT
+    let normalStats = {
+        "Gamertag": player.Gamertag,
+        "SpartanRank": spartanRank,
+        "XpBreakdown": {
+            "Current": xpCurrent,
+            "Left": left,
+            "Goal": goal,
+            "Percentage": percentage,
+            "PerDay": numDecFormat(((50000000 - xpCur) / Difference_In_Days)),
+        },
+        "MatchesLeft": {
+            "Arena": arena,
+            "Warzone": warzone,
+            "Infection": infection
+        }
+    };
+
+    return new Promise((resolve, reject) => {
+        resolve(normalStats);
+    });
+}
 // function getPlayer(gamertag){
     
 //     this.haloApi.getPlayer(gamertag).subscribe((res : res)=>{
