@@ -20,7 +20,7 @@
     "start": "cd src && tsc && node ../build/server.js",
     "build": "cd src && tsc",
     "test": "cd test && node client.js",
-    "build-server": "cd src && tsc && cp node_modules ../../html"
+    "build-server": "cd src && tsc && cd ../ && cp -r node_modules ../html"
   },
   "author": "Nicolaas Nel",
   "license": "ISC"
