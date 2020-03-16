@@ -5,6 +5,8 @@
 // ██║██║ ╚═╝ ██║██║     ╚██████╔╝██║  ██║   ██║   ███████║
 // ╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝
 // Imports
+const fs = require('fs');
+const node = require('node-essentials');
 import { Player } from '../models/player';
 import { get, getPlaylistName, numberFormat, numDecFormat } from '../functions/helpers';
 import { Query } from '../models/query';
@@ -166,6 +168,55 @@ export async function xp(player: any){
 
     return new Promise((resolve, reject) => {
         resolve(normalStats);
+    });
+}
+
+export async function championstart(metaData: any){
+    
+    let CurrentLeaderboard:any = [];
+
+    let getCurrentLeaderboard = new Promise((resolve, reject) => {
+        metaData.playlists.forEach(async (playlist: any) => {
+            let leaderboard: any;
+
+            leaderboard = await node.get(`https://www.haloapi.com/stats/h5/player-leaderboards/csr/${metaData.id}/${playlist.id}?=`, ["ocp-apim-subscription-key", process.env.API_KEY])
+            .then((data: any) => {
+                data = JSON.parse(data)
+                CurrentLeaderboard.push({
+                    name: playlist.name,
+                    details: data
+                });
+            });
+        });
+        resolve(CurrentLeaderboard)
+    });
+
+    let currentLeaderboard: any = await getCurrentLeaderboard;
+    console.log(CurrentLeaderboard);
+    
+    let herro: any = [];
+
+    // currentLeaderboard.forEach((item: any) => {
+    //     let players: any = [];
+    //     let getFullLeaderboard = item.details[0].Results.filter((scoreItem: any) => {     
+    //         players.push({
+    //             name: item.name,
+    //             lowest: scoreItem.Score.Csr
+    //         });
+    //     });
+
+    //     Math.max.apply(Math, players.map((player:any) => { console.log(player);
+    //     }))
+
+    //     // herro.push({
+    //     //     name: item.name,
+    //     //     lowest: scoreItem.Score.Csr
+    //     // });
+    // });
+
+    // console.log(CurrentLeaderboard);
+    return new Promise((resolve, reject) => {
+        resolve(currentLeaderboard);
     });
 }
 // function getPlayer(gamertag){

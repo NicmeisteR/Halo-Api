@@ -1,0 +1,218 @@
+{
+    "name": "Elimination",
+    "details": {
+        "Start": 0,
+        "Count": 200,
+        "ResultCount": 14,
+        "Results": [
+            {
+                "Player": {
+                    "Gamertag": "Coudde",
+                    "Xuid": null
+                },
+                "Rank": 1,
+                "Score": {
+                    "Tier": 1,
+                    "DesignationId": 7,
+                    "Csr": 1735,
+                    "PercentToNextTier": 0,
+                    "Rank": 1
+                }
+            },
+            {
+                "Player": {
+                    "Gamertag": "PUMA1323",
+                    "Xuid": null
+                },
+                "Rank": 2,
+                "Score": {
+                    "Tier": 1,
+                    "DesignationId": 7,
+                    "Csr": 1715,
+                    "PercentToNextTier": 0,
+                    "Rank": 2
+                }
+            },
+            {
+                "Player": {
+                    "Gamertag": "VIP Horizons",
+                    "Xuid": null
+                },
+                "Rank": 2,
+                "Score": {
+                    "Tier": 1,
+                    "DesignationId": 7,
+                    "Csr": 1715,
+                    "PercentToNextTier": 0,
+                    "Rank": 2
+                }
+            },
+            {
+                "Player": {
+                    "Gamertag": "Terorrize",
+                    "Xuid": null
+                },
+                "Rank": 4,
+                "Score": {
+                    "Tier": 1,
+                    "DesignationId": 7,
+                    "Csr": 1709,
+                    "PercentToNextTier": 0,
+                    "Rank": 4
+                }
+            },
+            {
+                "Player": {
+                    "Gamertag": "Its Promethium",
+                    "Xuid": null
+                },
+                "Rank": 5,
+                "Score": {
+                    "Tier": 1,
+                    "DesignationId": 7,
+                    "Csr": 1686,
+                    "PercentToNextTier": 0,
+                    "Rank": 5
+                }
+            },
+            {
+                "Player": {
+                    "Gamertag": "Harzzo",
+                    "Xuid": null
+                },
+                "Rank": 6,
+                "Score": {
+                    "Tier": 1,
+                    "DesignationId": 7,
+                    "Csr": 1684,
+                    "PercentToNextTier": 0,
+                    "Rank": 6
+                }
+            },
+            {
+                "Player": {
+                    "Gamertag": "LMS MOJIDIOS",
+                    "Xuid": null
+                },
+                "Rank": 7,
+                "Score": {
+                    "Tier": 1,
+                    "DesignationId": 7,
+                    "Csr": 1674,
+                    "PercentToNextTier": 0,
+                    "Rank": 7
+                }
+            },
+            {
+                "Player": {
+                    "Gamertag": "I got your Mojo",
+                    "Xuid": null
+                },
+                "Rank": 8,
+                "Score": {
+                    "Tier": 1,
+                    "DesignationId": 7,
+                    "Csr": 1644,
+                    "PercentToNextTier": 0,
+                    "Rank": 8
+                }
+            },
+            {
+                "Player": {
+                    "Gamertag": "CamMul",
+                    "Xuid": null
+                },
+                "Rank": 9,
+                "Score": {
+                    "Tier": 1,
+                    "DesignationId": 7,
+                    "Csr": 1640,
+                    "PercentToNextTier": 0,
+                    "Rank": 9
+                }
+            },
+            {
+                "Player": {
+                    "Gamertag": "StarKillerman34",
+                    "Xuid": null
+                },
+                "Rank": 10,
+                "Score": {
+                    "Tier": 1,
+                    "DesignationId": 7,
+                    "Csr": 1636,
+                    "PercentToNextTier": 0,
+                    "Rank": 10
+                }
+            },
+            {
+                "Player": {
+                    "Gamertag": "Intragravity",
+                    "Xuid": null
+                },
+                "Rank": 11,
+                "Score": {
+                    "Tier": 1,
+                    "DesignationId": 7,
+                    "Csr": 1618,
+                    "PercentToNextTier": 0,
+                    "Rank": 11
+                }
+            },
+            {
+                "Player": {
+                    "Gamertag": "PedroAntraX117",
+                    "Xuid": null
+                },
+                "Rank": 12,
+                "Score": {
+                    "Tier": 1,
+                    "DesignationId": 7,
+                    "Csr": 1606,
+                    "PercentToNextTier": 0,
+                    "Rank": 12
+                }
+            },
+            {
+                "Player": {
+                    "Gamertag": "OUTB Spectre",
+                    "Xuid": null
+                },
+                "Rank": 13,
+                "Score": {
+                    "Tier": 1,
+                    "DesignationId": 7,
+                    "Csr": 1601,
+                    "PercentToNextTier": 0,
+                    "Rank": 13
+                }
+            },
+            {
+                "Player": {
+                    "Gamertag": "Rockkstar A",
+                    "Xuid": null
+                },
+                "Rank": 14,
+                "Score": {
+                    "Tier": 1,
+                    "DesignationId": 7,
+                    "Csr": 1600,
+                    "PercentToNextTier": 0,
+                    "Rank": 14
+                }
+            }
+        ],
+        "Links": {
+            "Self": {
+                "AuthorityId": "spartanstats",
+                "Path": "/h5/player-leaderboards/csr/26506abf-00d2-46be-9e0e-98f478b5b969/aba6fbcb-9a2a-445a-b1d6-373fb2eb6a82",
+                "QueryString": "?include-xuids=false&=",
+                "RetryPolicyId": "",
+                "TopicName": "",
+                "AcknowledgementTypeId": 0,
+                "AuthenticationLifetimeExtensionSupported": false,
+                "ClearanceAware": false
+            }
+        }
+    }
+}

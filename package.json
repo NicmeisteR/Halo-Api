@@ -10,6 +10,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "find-config": "^1.0.0",
+    "node-cron": "^2.0.3",
     "node-essentials": "^1.2.6",
     "request": "^2.88.0",
     "typescript": "^3.7.4"
