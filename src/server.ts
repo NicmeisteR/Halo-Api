@@ -70,7 +70,7 @@ function start() {
 
   });
 
-  app.get('/championstart', async (request, response) => {
+  app.get('/championstart', (request, response) => {
     response.writeHead(200, {
       'Content-Type': 'text/json',
       'Developer': 'Nicolaas Nel (NicmeisteR)',
@@ -82,16 +82,38 @@ function start() {
     
     fs.readFile(`./cache/metaData.json`, 'utf8', async (err: any, data: any) => {
       if (err) { throw err };
+
       metaData = JSON.parse(data);
       let responseObject: any;
-      try {
+
+      try 
+      {
         responseObject = await championstart(metaData);
-      } catch (error) {
-        console.log(error);
-        
+      } 
+      catch (error) 
+      {
+        node.writeToFile("errors", "championstart", "txt", error);
+        return "Failed on championstart";
       }
-      finally{
-        response.end(JSON.stringify(responseObject), 'utf8');
+      finally
+      {
+        fs.readFile(`./cache/LeaderBoard.json`, 'utf8', async (err: any, data: any) => {
+          let playlists:any = [];
+          // data = JSON.parse(data.slice(0, -1) + ''); TODO: This is here because I left it here so deal with it. Jokes aside it was for formatting leaving for a while.
+          data = JSON.parse(data);
+          data.forEach((item: any) => {
+            playlists.push({
+                Playlist: item.name,
+                CSR: item.details.Results[item.details.ResultCount - 1].Score.Csr,
+                Rank: item.details.Results[item.details.ResultCount - 1].Rank
+            });
+        });
+
+        console.log(playlists);
+
+        response.end(JSON.stringify(playlists), 'utf8');
+        });
+
       }
     
     });
@@ -113,9 +135,13 @@ start();
 // # │ │ │ │ │ │
 // # │ │ │ │ │ │
 // # * * * * * *
-cron.schedule('*/10 * * * * *', async () => {
+cron.schedule('* * */24 * * *', async () => {
   let metaData = await weeklySchedule();
 
-  console.log('running a task every minute');
+  let date = new Date;
+  let datetime = `Last Sync: ${date.getDate()}/${(date.getMonth()+1)}/${date.getFullYear()} @ ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+
+  // console.log('Running a task every day');
   node.writeToFile("./cache", "metaData", "json", JSON.stringify(metaData));
+  node.writeToFile("./logs", "cronlog", "txt", datetime);
 });
