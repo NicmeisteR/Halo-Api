@@ -9,6 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// ██╗███╗   ███╗██████╗  ██████╗ ██████╗ ████████╗███████╗
+// ██║████╗ ████║██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝██╔════╝
+// ██║██╔████╔██║██████╔╝██║   ██║██████╔╝   ██║   ███████╗
+// ██║██║╚██╔╝██║██╔═══╝ ██║   ██║██╔══██╗   ██║   ╚════██║
+// ██║██║ ╚═╝ ██║██║     ╚██████╔╝██║  ██║   ██║   ███████║
+// ╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝
+// Imports
+const fs = require('fs');
+const node = require('node-essentials');
 const helpers_1 = require("../functions/helpers");
 // ███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
 // ██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
@@ -141,7 +150,7 @@ function xp(player) {
         let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
         // OBJECT
         let normalStats = {
-            "Gamertag": player.Gamertag,
+            "Gamertag": player.PlayerId.Gamertag,
             "SpartanRank": spartanRank,
             "XpBreakdown": {
                 "Current": xpCurrent,
@@ -162,6 +171,73 @@ function xp(player) {
     });
 }
 exports.xp = xp;
+function championstart(metaData) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let CurrentLeaderboard = [];
+        metaData.playlists.forEach((playlist) => __awaiter(this, void 0, void 0, function* () {
+            let leaderboard;
+            leaderboard = yield node.get(`https://www.haloapi.com/stats/h5/player-leaderboards/csr/${metaData.id}/${playlist.id}?=`, ["ocp-apim-subscription-key", process.env.API_KEY])
+                .then((data) => {
+                data = JSON.parse(data);
+                CurrentLeaderboard.push({
+                    name: playlist.name,
+                    details: data
+                });
+                node.writeToFile("./cache", "LeaderBoard", "json", JSON.stringify(CurrentLeaderboard));
+                // node.writeToFile("./cache", playlist.name, "json", JSON.stringify({
+                //     name: playlist.name,
+                //     details: data
+                // }));
+                return new Promise((resolve, reject) => {
+                    resolve(CurrentLeaderboard);
+                });
+            });
+        }));
+        console.log(CurrentLeaderboard);
+        // let getCurrentLeaderboard = new Promise((resolve, reject) => {
+        //     metaData.playlists.forEach(async (playlist: any) => {
+        //         let leaderboard: any;
+        //         leaderboard = await node.get(`https://www.haloapi.com/stats/h5/player-leaderboards/csr/${metaData.id}/${playlist.id}?=`, ["ocp-apim-subscription-key", process.env.API_KEY])
+        //         .then((data: any) => {
+        //             data = JSON.parse(data)
+        //             CurrentLeaderboard.push({
+        //                 name: playlist.name,
+        //                 details: data
+        //             });
+        //             node.writeToFile("./cache", "LeaderBoard", "json", JSON.stringify(CurrentLeaderboard));
+        //         });
+        //     });
+        //     resolve(CurrentLeaderboard)
+        // })
+        // let currentLeaderboard: any = await getCurrentLeaderboard.then(
+        //     (res: any) => {
+        //         console.log(res)
+        //     }
+        // );
+        // console.log(currentLeaderboard);
+        let herro = [];
+        // currentLeaderboard.forEach((item: any) => {
+        //     let players: any = [];
+        //     let getFullLeaderboard = item.details[0].Results.filter((scoreItem: any) => {     
+        //         players.push({
+        //             name: item.name,
+        //             lowest: scoreItem.Score.Csr
+        //         });
+        //     });
+        //     Math.max.apply(Math, players.map((player:any) => { console.log(player);
+        //     }))
+        //     // herro.push({
+        //     //     name: item.name,
+        //     //     lowest: scoreItem.Score.Csr
+        //     // });
+        // });
+        // console.log(CurrentLeaderboard);
+        // return new Promise((resolve, reject) => {
+        //     resolve(currentLeaderboard);
+        // });
+    });
+}
+exports.championstart = championstart;
 // function getPlayer(gamertag){
 //     this.haloApi.getPlayer(gamertag).subscribe((res : res)=>{
 //       this.player = res.Results[0];

@@ -165,3 +165,46 @@ function numDecFormat(x) {
     return parts.join(".");
 }
 exports.numDecFormat = numDecFormat;
+function weeklySchedule() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let metaData;
+        try {
+            metaData = yield node.get("https://www.haloapi.com/metadata/h5/metadata/seasons", ["ocp-apim-subscription-key", process.env.API_KEY]).then(console.log(`Retrieved: Meta Data`));
+        }
+        catch (error) {
+            console.log(error);
+        }
+        finally {
+            return new Promise((resolve, reject) => {
+                let currentPlaylists = null;
+                metaData = JSON.parse(metaData);
+                metaData.filter((item) => {
+                    if (item.isActive === true) {
+                        let activePlaylists = [];
+                        item.playlists.forEach((playlist) => {
+                            if (playlist.isActive) {
+                                activePlaylists.push({
+                                    name: playlist.name,
+                                    description: playlist.description,
+                                    id: playlist.id
+                                });
+                            }
+                        });
+                        currentPlaylists = {
+                            name: item.name,
+                            description: item.description,
+                            date: {
+                                startDate: item.startDate,
+                                endDate: item.endDate
+                            },
+                            id: item.id,
+                            playlists: activePlaylists
+                        };
+                    }
+                });
+                return resolve(currentPlaylists);
+            });
+        }
+    });
+}
+exports.weeklySchedule = weeklySchedule;
