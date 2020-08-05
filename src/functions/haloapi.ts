@@ -171,83 +171,75 @@ export async function xp(player: any){
     });
 }
 
-export async function championstart(metaData: any){
+// export async function championstart(metaData: any){
+    
+//     let CurrentLeaderboard:any = [];
+
+//     // metaData.forEach(async (item: any, i: number) => {
+//     //     setTimeout(() => {
+//     //       console.log(item);
+          
+//     //     }, i * 10000);
+//     //   });
+
+//     metaData.playlists.forEach((playlist: any, i: number) => {
+//         let leaderboard: any;
+
+//         setTimeout(async () => {
+//             leaderboard = await node.get(`https://www.haloapi.com/stats/h5/player-leaderboards/csr/${metaData.id}/${playlist.id}?=`, ["ocp-apim-subscription-key", process.env.API_KEY])
+//             .then((data: any) => {
+//                 data = JSON.parse(data)
+//                 CurrentLeaderboard.push({
+//                     name: playlist.name,
+//                     details: data
+//                 });
+                
+//                 node.writeToFile("./cache", "LeaderBoard", "json", JSON.stringify(CurrentLeaderboard));
+//                 // node.writeToFile("./cache", playlist.name, "json", JSON.stringify({
+//                 //     name: playlist.name,
+//                 //     details: data
+//                 // }));
+    
+//             })
+//           }, i * 3600);
+//     });
+
+
+
+//     return new Promise((resolve, reject) => {
+//         resolve(CurrentLeaderboard) 
+//     })
+//     return;
+// }
+
+export function championstart(metaData: any){
     
     let CurrentLeaderboard:any = [];
 
-    metaData.playlists.forEach(async (playlist: any) => {
-        let leaderboard: any;
-
-        leaderboard = await node.get(`https://www.haloapi.com/stats/h5/player-leaderboards/csr/${metaData.id}/${playlist.id}?=`, ["ocp-apim-subscription-key", process.env.API_KEY])
-        .then((data: any) => {
-            data = JSON.parse(data)
-            CurrentLeaderboard.push({
-                name: playlist.name,
-                details: data
+    metaData.playlists.forEach((playlist: any, i: number) => {
+        setTimeout(() => {
+            addPlaylist(playlist, metaData).then((playlistInfo: any) => {
+                CurrentLeaderboard.push({
+                    name: playlist.name,
+                    details: JSON.parse(playlistInfo)
+                });
             });
-            
             node.writeToFile("./cache", "LeaderBoard", "json", JSON.stringify(CurrentLeaderboard));
-            // node.writeToFile("./cache", playlist.name, "json", JSON.stringify({
-            //     name: playlist.name,
-            //     details: data
-            // }));
-            return new Promise((resolve, reject) => {
-                resolve(CurrentLeaderboard) 
-            })
-        })
+        }, i * 1000);
     });
+}
 
-    console.log(CurrentLeaderboard);
-
-    // let getCurrentLeaderboard = new Promise((resolve, reject) => {
+async function addPlaylist(playlist: any, metaData: any){
+    let response: any;
  
-    //     metaData.playlists.forEach(async (playlist: any) => {
-    //         let leaderboard: any;
-
-    //         leaderboard = await node.get(`https://www.haloapi.com/stats/h5/player-leaderboards/csr/${metaData.id}/${playlist.id}?=`, ["ocp-apim-subscription-key", process.env.API_KEY])
-    //         .then((data: any) => {
-    //             data = JSON.parse(data)
-    //             CurrentLeaderboard.push({
-    //                 name: playlist.name,
-    //                 details: data
-    //             });
-    //             node.writeToFile("./cache", "LeaderBoard", "json", JSON.stringify(CurrentLeaderboard));
-    //         });
-    //     });
-    //     resolve(CurrentLeaderboard)
-    // })
-  
-    // let currentLeaderboard: any = await getCurrentLeaderboard.then(
-    //     (res: any) => {
-    //         console.log(res)
-    //     }
-    // );
-    // console.log(currentLeaderboard);
-    
-    let herro: any = [];
-
-    // currentLeaderboard.forEach((item: any) => {
-    //     let players: any = [];
-    //     let getFullLeaderboard = item.details[0].Results.filter((scoreItem: any) => {     
-    //         players.push({
-    //             name: item.name,
-    //             lowest: scoreItem.Score.Csr
-    //         });
-    //     });
-
-    //     Math.max.apply(Math, players.map((player:any) => { console.log(player);
-    //     }))
-
-    //     // herro.push({
-    //     //     name: item.name,
-    //     //     lowest: scoreItem.Score.Csr
-    //     // });
-    // });
-
-    // console.log(CurrentLeaderboard);
-    // return new Promise((resolve, reject) => {
-    //     resolve(currentLeaderboard);
-    // });
+    try {
+        response = await node.get(`https://www.haloapi.com/stats/h5/player-leaderboards/csr/${metaData.id}/${playlist.id}?=`, ["ocp-apim-subscription-key", process.env.API_KEY])
+    } catch (error) {
+        
+    }
+    finally {
+       return response;
+    }
 }
 // function getPlayer(gamertag){
     

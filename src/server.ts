@@ -35,7 +35,7 @@ function start() {
       'Content-Type': 'text/json',
       'Developer': 'Nicolaas Nel (NicmeisteR)',
       'Support-Development': 'https://ko-fi.com/nicmeister',
-      'Twitter': 'https://twitter.com/FinalNecessity'
+      'Twitter': 'https://twitter.com/NicmeistaR'
     });
 
     let query = await selector(request.body.query, request.body.gamertag);
@@ -59,7 +59,7 @@ function start() {
       'Content-Type': 'text/json',
       'Developer': 'Nicolaas Nel (NicmeisteR)',
       'Support-Development': 'https://ko-fi.com/nicmeister',
-      'Twitter': 'https://twitter.com/FinalNecessity'
+      'Twitter': 'https://twitter.com/NicmeistaR'
     });
 
     fs.readFile(`./cache/metaData.json`, 'utf8', (err: any, data: any) => {
@@ -75,7 +75,7 @@ function start() {
       'Content-Type': 'text/json',
       'Developer': 'Nicolaas Nel (NicmeisteR)',
       'Support-Development': 'https://ko-fi.com/nicmeister',
-      'Twitter': 'https://twitter.com/FinalNecessity'
+      'Twitter': 'https://twitter.com/NicmeistaR'
     });
 
     let metaData: any;
@@ -88,7 +88,7 @@ function start() {
 
       try 
       {
-        responseObject = await championstart(metaData);
+        responseObject = championstart(metaData); 
       } 
       catch (error) 
       {
@@ -97,23 +97,23 @@ function start() {
       }
       finally
       {
-        fs.readFile(`./cache/LeaderBoard.json`, 'utf8', async (err: any, data: any) => {
-          let playlists:any = [];
-          // data = JSON.parse(data.slice(0, -1) + ''); TODO: This is here because I left it here so deal with it. Jokes aside it was for formatting leaving for a while.
-          data = JSON.parse(data);
-          data.forEach((item: any) => {
-            playlists.push({
-                Playlist: item.name,
-                CSR: item.details.Results[item.details.ResultCount - 1].Score.Csr,
-                Rank: item.details.Results[item.details.ResultCount - 1].Rank
-            });
-        });
-
-        console.log(playlists);
-
-        response.end(JSON.stringify(playlists), 'utf8');
-        });
-
+        setTimeout(() => {
+          fs.readFile(`./cache/LeaderBoard.json`, 'utf8', (err: any, data: any) => {
+            let playlists:any = [];
+            // data = JSON.parse(data.slice(0, -1) + ''); TODO: This is here because I left it here so deal with it. Jokes aside it was for formatting leaving for a while.
+            data = JSON.parse(data);
+            
+            data.forEach((item: any) => {
+              playlists.push({
+                  Playlist: item.name,
+                  CSR: item.details.Results[item.details.ResultCount - 1].Score.Csr,
+                  Rank: item.details.Results[item.details.ResultCount - 1].Rank
+              });
+          });
+          
+          response.end(JSON.stringify(playlists), 'utf8');
+          });
+        }, 10000);
       }
     
     });
