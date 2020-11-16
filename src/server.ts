@@ -102,7 +102,7 @@ start();
 // # │ │ │ │ │ │
 // # │ │ │ │ │ │
 // # * * * * * *
-cron.schedule('*/10 * * * * *', async () => {
+cron.schedule('* * */24 * * *', async () => {
   let metaData = await weeklySchedule();
   let leaderboardData = await weeklyScheduleLeaderboard();
 
