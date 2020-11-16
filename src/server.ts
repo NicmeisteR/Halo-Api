@@ -118,8 +118,8 @@ start();
 // # │ │ │ │ │ │
 // # │ │ │ │ │ │
 // # * * * * * *
-// cron.schedule('* * */24 * * *', async () => {
-cron.schedule('*/10 * * * * *', async () => {
+cron.schedule('* * */24 * * *', async () => {
+// cron.schedule('*/10 * * * * *', async () => {
   await weeklySchedule();
   // await weeklySchedule().then((async (res) => await weeklyScheduleLeaderboard(res)));
 
