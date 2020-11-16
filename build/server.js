@@ -18,7 +18,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Imports                                                
 const express = require("express");
 const helpers_1 = require("./functions/helpers");
-const haloapi_1 = require("./functions/haloapi");
 const fs = require('fs');
 const node = require('node-essentials');
 const bodyParser = require('body-parser');
@@ -42,7 +41,7 @@ function start() {
             'Content-Type': 'text/json',
             'Developer': 'Nicolaas Nel (NicmeisteR)',
             'Support-Development': 'https://ko-fi.com/nicmeister',
-            'Twitter': 'https://twitter.com/FinalNecessity'
+            'Twitter': 'https://twitter.com/NicmeistaR'
         });
         let query = yield helpers_1.selector(request.body.query, request.body.gamertag);
         let playerObject = yield helpers_1.get(request.body.token, query);
@@ -62,7 +61,7 @@ function start() {
             'Content-Type': 'text/json',
             'Developer': 'Nicolaas Nel (NicmeisteR)',
             'Support-Development': 'https://ko-fi.com/nicmeister',
-            'Twitter': 'https://twitter.com/FinalNecessity'
+            'Twitter': 'https://twitter.com/NicmeistaR'
         });
         fs.readFile(`./cache/metaData.json`, 'utf8', (err, data) => {
             if (err) {
@@ -73,46 +72,22 @@ function start() {
             response.end(data);
         });
     }));
-    app.get('/championstart', (request, response) => {
+    app.get('/championstart', (request, response) => __awaiter(this, void 0, void 0, function* () {
         response.writeHead(200, {
             'Content-Type': 'text/json',
             'Developer': 'Nicolaas Nel (NicmeisteR)',
             'Support-Development': 'https://ko-fi.com/nicmeister',
-            'Twitter': 'https://twitter.com/FinalNecessity'
+            'Twitter': 'https://twitter.com/NicmeistaR'
         });
-        let metaData;
-        fs.readFile(`./cache/metaData.json`, 'utf8', (err, data) => __awaiter(this, void 0, void 0, function* () {
+        fs.readFile(`./cache/LeaderBoard.json`, 'utf8', (err, data) => {
             if (err) {
                 throw err;
             }
             ;
-            metaData = JSON.parse(data);
-            let responseObject;
-            try {
-                responseObject = yield haloapi_1.championstart(metaData);
-            }
-            catch (error) {
-                node.writeToFile("errors", "championstart", "txt", error);
-                return "Failed on championstart";
-            }
-            finally {
-                fs.readFile(`./cache/LeaderBoard.json`, 'utf8', (err, data) => __awaiter(this, void 0, void 0, function* () {
-                    let playlists = [];
-                    // data = JSON.parse(data.slice(0, -1) + ''); TODO: This is here because I left it here so deal with it. Jokes aside it was for formatting leaving for a while.
-                    data = JSON.parse(data);
-                    data.forEach((item) => {
-                        playlists.push({
-                            Playlist: item.name,
-                            CSR: item.details.Results[item.details.ResultCount - 1].Score.Csr,
-                            Rank: item.details.Results[item.details.ResultCount - 1].Rank
-                        });
-                    });
-                    console.log(playlists);
-                    response.end(JSON.stringify(playlists), 'utf8');
-                }));
-            }
-        }));
-    });
+            console.log(data);
+            response.end(data);
+        });
+    }));
     app.listen(process.env.PORT, () => console.log(`API now available on http://localhost:${process.env.PORT}`));
 }
 // let app = express();
@@ -127,11 +102,13 @@ start();
 // # │ │ │ │ │ │
 // # │ │ │ │ │ │
 // # * * * * * *
-cron.schedule('* * */24 * * *', () => __awaiter(void 0, void 0, void 0, function* () {
+cron.schedule('*/10 * * * * *', () => __awaiter(void 0, void 0, void 0, function* () {
     let metaData = yield helpers_1.weeklySchedule();
+    let leaderboardData = yield helpers_1.weeklyScheduleLeaderboard();
     let date = new Date;
     let datetime = `Last Sync: ${date.getDate()}/${(date.getMonth() + 1)}/${date.getFullYear()} @ ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
     // console.log('Running a task every day');
     node.writeToFile("./cache", "metaData", "json", JSON.stringify(metaData));
+    node.writeToFile("./cache", "leaderboardData", "json", JSON.stringify(leaderboardData));
     node.writeToFile("./logs", "cronlog", "txt", datetime);
 }));

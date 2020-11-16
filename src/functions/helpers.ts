@@ -6,6 +6,8 @@
 // ╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝
 // Imports
 const node = require('node-essentials');
+const fs = require('fs');
+import { championstart } from '../functions/haloapi';
 import { Player, ArenaPlaylistStats } from '../models/player';
 import { Query } from '../models/query';
 import { Playlists } from '../models/playlists';
@@ -204,4 +206,46 @@ export async function weeklySchedule(){
             return resolve(currentPlaylists);
         });
     }
+}
+
+export async function weeklyScheduleLeaderboard(){
+
+    let metaData: any;
+    let responseObject: any;
+    
+    fs.readFile(`./cache/metaData.json`, 'utf8', async (err: any, data: any) => {
+      if (err) { throw err };
+
+      metaData = JSON.parse(data);
+
+      try 
+      {
+        responseObject = championstart(metaData); 
+      } 
+      catch (error) 
+      {
+        node.writeToFile("errors", "championstart", "txt", error);
+        return "Failed on championstart";
+      }
+      finally
+      {
+        return new Promise<any>((resolve, reject) => {
+        let playlists:any = [];
+          fs.readFile(`./cache/LeaderBoard.json`, 'utf8', (err: any, data: any) => {
+          
+            // data = JSON.parse(data.slice(0, -1) + ''); TODO: This is here because I left it here so deal with it. Jokes aside it was for formatting leaving for a while.
+            data = JSON.parse(data);
+            
+            data.forEach((item: any) => {
+              playlists.push({
+                  Playlist: item.name,
+                  CSR: item.details.Results[item.details.ResultCount - 1].Score.Csr,
+                  Rank: item.details.Results[item.details.ResultCount - 1].Rank
+              });
+            });
+          });
+          return resolve(playlists);
+        });
+    }
+    });
 }

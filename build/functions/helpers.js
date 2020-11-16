@@ -17,7 +17,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ╚═╝╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝
 // Imports
 const node = require('node-essentials');
+const fs = require('fs');
 const haloapi_1 = require("../functions/haloapi");
+const haloapi_2 = require("../functions/haloapi");
 // ███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
 // ██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
 // █████╗  ██║   ██║██╔██╗ ██║██║        ██║   ██║██║   ██║██╔██╗ ██║███████╗
@@ -51,7 +53,7 @@ function selector(query, gamertag) {
                 return resolve({
                     "url": url,
                     "query": query,
-                    "function": haloapi_1.arena
+                    "function": haloapi_2.arena
                 });
             });
         }
@@ -60,7 +62,7 @@ function selector(query, gamertag) {
                 return resolve({
                     "url": url,
                     "query": query,
-                    "function": haloapi_1.ranks
+                    "function": haloapi_2.ranks
                 });
             });
         }
@@ -69,7 +71,7 @@ function selector(query, gamertag) {
                 return resolve({
                     "url": url,
                     "query": query,
-                    "function": haloapi_1.xp
+                    "function": haloapi_2.xp
                 });
             });
         }
@@ -77,7 +79,7 @@ function selector(query, gamertag) {
             return resolve({
                 "url": url,
                 "query": query,
-                "function": haloapi_1.arena
+                "function": haloapi_2.arena
             });
         });
     });
@@ -208,3 +210,41 @@ function weeklySchedule() {
     });
 }
 exports.weeklySchedule = weeklySchedule;
+function weeklyScheduleLeaderboard() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let metaData;
+        let responseObject;
+        fs.readFile(`./cache/metaData.json`, 'utf8', (err, data) => __awaiter(this, void 0, void 0, function* () {
+            if (err) {
+                throw err;
+            }
+            ;
+            metaData = JSON.parse(data);
+            try {
+                responseObject = haloapi_1.championstart(metaData);
+            }
+            catch (error) {
+                node.writeToFile("errors", "championstart", "txt", error);
+                return "Failed on championstart";
+            }
+            finally {
+                return new Promise((resolve, reject) => {
+                    let playlists = [];
+                    fs.readFile(`./cache/LeaderBoard.json`, 'utf8', (err, data) => {
+                        // data = JSON.parse(data.slice(0, -1) + ''); TODO: This is here because I left it here so deal with it. Jokes aside it was for formatting leaving for a while.
+                        data = JSON.parse(data);
+                        data.forEach((item) => {
+                            playlists.push({
+                                Playlist: item.name,
+                                CSR: item.details.Results[item.details.ResultCount - 1].Score.Csr,
+                                Rank: item.details.Results[item.details.ResultCount - 1].Rank
+                            });
+                        });
+                    });
+                    return resolve(playlists);
+                });
+            }
+        }));
+    });
+}
+exports.weeklyScheduleLeaderboard = weeklyScheduleLeaderboard;

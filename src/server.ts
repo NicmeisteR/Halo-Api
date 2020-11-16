@@ -7,7 +7,7 @@
 // Imports                                                
 import express = require('express');
 import { Player } from './models/player';
-import { get, selector, weeklySchedule } from './functions/helpers';
+import { get, selector, weeklySchedule, weeklyScheduleLeaderboard } from './functions/helpers';
 import { championstart } from './functions/haloapi';
 const fs = require('fs');
 const node = require('node-essentials');
@@ -70,7 +70,7 @@ function start() {
 
   });
 
-  app.get('/championstart', (request, response) => {
+  app.get('/championstart', async (request, response) => {
     response.writeHead(200, {
       'Content-Type': 'text/json',
       'Developer': 'Nicolaas Nel (NicmeisteR)',
@@ -78,47 +78,14 @@ function start() {
       'Twitter': 'https://twitter.com/NicmeistaR'
     });
 
-    let metaData: any;
-    
-    fs.readFile(`./cache/metaData.json`, 'utf8', async (err: any, data: any) => {
+    fs.readFile(`./cache/LeaderBoard.json`, 'utf8', (err: any, data: any) => {
       if (err) { throw err };
-
-      metaData = JSON.parse(data);
-      let responseObject: any;
-
-      try 
-      {
-        responseObject = championstart(metaData); 
-      } 
-      catch (error) 
-      {
-        node.writeToFile("errors", "championstart", "txt", error);
-        return "Failed on championstart";
-      }
-      finally
-      {
-        setTimeout(() => {
-          fs.readFile(`./cache/LeaderBoard.json`, 'utf8', (err: any, data: any) => {
-            let playlists:any = [];
-            // data = JSON.parse(data.slice(0, -1) + ''); TODO: This is here because I left it here so deal with it. Jokes aside it was for formatting leaving for a while.
-            data = JSON.parse(data);
-            
-            data.forEach((item: any) => {
-              playlists.push({
-                  Playlist: item.name,
-                  CSR: item.details.Results[item.details.ResultCount - 1].Score.Csr,
-                  Rank: item.details.Results[item.details.ResultCount - 1].Rank
-              });
-          });
-          
-          response.end(JSON.stringify(playlists), 'utf8');
-          });
-        }, 10000);
-      }
-    
+      console.log(data);  
+      response.end(data);
     });
 
   });
+
   app.listen(process.env.PORT, () => console.log(`API now available on http://localhost:${process.env.PORT}`));
 }
 
@@ -135,13 +102,15 @@ start();
 // # │ │ │ │ │ │
 // # │ │ │ │ │ │
 // # * * * * * *
-cron.schedule('* * */24 * * *', async () => {
+cron.schedule('*/10 * * * * *', async () => {
   let metaData = await weeklySchedule();
+  let leaderboardData = await weeklyScheduleLeaderboard();
 
   let date = new Date;
   let datetime = `Last Sync: ${date.getDate()}/${(date.getMonth()+1)}/${date.getFullYear()} @ ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 
   // console.log('Running a task every day');
   node.writeToFile("./cache", "metaData", "json", JSON.stringify(metaData));
+  node.writeToFile("./cache", "leaderboardData", "json", JSON.stringify(leaderboardData));
   node.writeToFile("./logs", "cronlog", "txt", datetime);
 });
