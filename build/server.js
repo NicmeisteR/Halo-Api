@@ -102,13 +102,12 @@ start();
 // # │ │ │ │ │ │
 // # │ │ │ │ │ │
 // # * * * * * *
+// cron.schedule('* * */24 * * *', async () => {
 cron.schedule('*/10 * * * * *', () => __awaiter(void 0, void 0, void 0, function* () {
-    let metaData = yield helpers_1.weeklySchedule();
-    let leaderboardData = yield helpers_1.weeklyScheduleLeaderboard();
+    yield helpers_1.weeklySchedule().then(((res) => __awaiter(void 0, void 0, void 0, function* () { return yield helpers_1.weeklyScheduleLeaderboard(res); })));
     let date = new Date;
     let datetime = `Last Sync: ${date.getDate()}/${(date.getMonth() + 1)}/${date.getFullYear()} @ ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
     // console.log('Running a task every day');
-    node.writeToFile("./cache", "metaData", "json", JSON.stringify(metaData));
-    node.writeToFile("./cache", "leaderboardData", "json", JSON.stringify(leaderboardData));
+    // node.writeToFile("./cache", "leaderboardData", "json", JSON.stringify(leaderboardData));
     node.writeToFile("./logs", "cronlog", "txt", datetime);
 }));

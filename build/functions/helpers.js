@@ -204,47 +204,39 @@ function weeklySchedule() {
                         };
                     }
                 });
+                node.writeToFile("./cache", "metaData", "json", JSON.stringify(currentPlaylists));
                 return resolve(currentPlaylists);
             });
         }
     });
 }
 exports.weeklySchedule = weeklySchedule;
-function weeklyScheduleLeaderboard() {
+function weeklyScheduleLeaderboard(metaData) {
     return __awaiter(this, void 0, void 0, function* () {
-        let metaData;
         let responseObject;
-        fs.readFile(`./cache/metaData.json`, 'utf8', (err, data) => __awaiter(this, void 0, void 0, function* () {
-            if (err) {
-                throw err;
-            }
-            ;
-            metaData = JSON.parse(data);
-            try {
-                responseObject = haloapi_1.championstart(metaData);
-            }
-            catch (error) {
-                node.writeToFile("errors", "championstart", "txt", error);
-                return "Failed on championstart";
-            }
-            finally {
-                return new Promise((resolve, reject) => {
-                    let playlists = [];
-                    fs.readFile(`./cache/LeaderBoard.json`, 'utf8', (err, data) => {
-                        // data = JSON.parse(data.slice(0, -1) + ''); TODO: This is here because I left it here so deal with it. Jokes aside it was for formatting leaving for a while.
-                        data = JSON.parse(data);
-                        data.forEach((item) => {
-                            playlists.push({
-                                Playlist: item.name,
-                                CSR: item.details.Results[item.details.ResultCount - 1].Score.Csr,
-                                Rank: item.details.Results[item.details.ResultCount - 1].Rank
-                            });
-                        });
+        try {
+            responseObject = haloapi_1.championstart(metaData);
+        }
+        catch (error) {
+            node.writeToFile("errors", "championstart", "txt", error);
+            return "Failed on championstart";
+        }
+        finally {
+            fs.readFile(`./cache/LeaderBoard.json`, 'utf8', (err, data) => {
+                console.log("data", data);
+                let playlists = [];
+                // data = JSON.parse(data.slice(0, -1) + ''); TODO: This is here because I left it here so deal with it. Jokes aside it was for formatting leaving for a while.
+                data = JSON.parse(data);
+                data.forEach((item) => {
+                    playlists.push({
+                        Playlist: item.name,
+                        CSR: item.details.Results[item.details.ResultCount - 1].Score.Csr,
+                        Rank: item.details.Results[item.details.ResultCount - 1].Rank
                     });
-                    return resolve(playlists);
+                    node.writeToFile("./cache", "leaderboardData", "json", JSON.stringify(playlists));
                 });
-            }
-        }));
+            });
+        }
     });
 }
 exports.weeklyScheduleLeaderboard = weeklyScheduleLeaderboard;

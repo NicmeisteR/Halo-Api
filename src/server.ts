@@ -70,6 +70,22 @@ function start() {
 
   });
 
+  app.get('/csr-designations', async (request, response) => {
+    response.writeHead(200, {
+      'Content-Type': 'text/json',
+      'Developer': 'Nicolaas Nel (NicmeisteR)',
+      'Support-Development': 'https://ko-fi.com/nicmeister',
+      'Twitter': 'https://twitter.com/NicmeistaR'
+    });
+
+    fs.readFile(`./cache/csr-designations.json`, 'utf8', (err: any, data: any) => {
+      if (err) { throw err };
+      console.log(data);  
+      response.end(data);
+    });
+
+  });
+
   app.get('/championstart', async (request, response) => {
     response.writeHead(200, {
       'Content-Type': 'text/json',
@@ -102,15 +118,15 @@ start();
 // # │ │ │ │ │ │
 // # │ │ │ │ │ │
 // # * * * * * *
-cron.schedule('* * */24 * * *', async () => {
-  let metaData = await weeklySchedule();
-  let leaderboardData = await weeklyScheduleLeaderboard();
+// cron.schedule('* * */24 * * *', async () => {
+cron.schedule('*/10 * * * * *', async () => {
+  await weeklySchedule();
+  // await weeklySchedule().then((async (res) => await weeklyScheduleLeaderboard(res)));
 
   let date = new Date;
   let datetime = `Last Sync: ${date.getDate()}/${(date.getMonth()+1)}/${date.getFullYear()} @ ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 
   // console.log('Running a task every day');
-  node.writeToFile("./cache", "metaData", "json", JSON.stringify(metaData));
-  node.writeToFile("./cache", "leaderboardData", "json", JSON.stringify(leaderboardData));
+  // node.writeToFile("./cache", "leaderboardData", "json", JSON.stringify(leaderboardData));
   node.writeToFile("./logs", "cronlog", "txt", datetime);
 });

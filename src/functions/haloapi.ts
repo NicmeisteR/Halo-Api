@@ -216,6 +216,7 @@ export async function get(query: string) {
 // }
 
 export function championstart(metaData: any){
+    console.log("metadata", metaData);
     
     let CurrentLeaderboard:any = [];
 

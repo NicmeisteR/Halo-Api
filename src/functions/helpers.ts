@@ -203,49 +203,43 @@ export async function weeklySchedule(){
                     };
                 }
             });
+            node.writeToFile("./cache", "metaData", "json", JSON.stringify(currentPlaylists));
             return resolve(currentPlaylists);
+            
         });
     }
 }
 
-export async function weeklyScheduleLeaderboard(){
+export async function weeklyScheduleLeaderboard(metaData: any){
 
-    let metaData: any;
     let responseObject: any;
-    
-    fs.readFile(`./cache/metaData.json`, 'utf8', async (err: any, data: any) => {
-      if (err) { throw err };
-
-      metaData = JSON.parse(data);
-
-      try 
-      {
+    try 
+    {
         responseObject = championstart(metaData); 
-      } 
-      catch (error) 
-      {
+    } 
+    catch (error) 
+    {
         node.writeToFile("errors", "championstart", "txt", error);
         return "Failed on championstart";
-      }
-      finally
-      {
-        return new Promise<any>((resolve, reject) => {
-        let playlists:any = [];
-          fs.readFile(`./cache/LeaderBoard.json`, 'utf8', (err: any, data: any) => {
-          
+    }
+    finally
+    {
+        fs.readFile(`./cache/LeaderBoard.json`, 'utf8', (err: any, data: any) => {
+            console.log("data", data);
+            
+            let playlists:any = [];
+            
             // data = JSON.parse(data.slice(0, -1) + ''); TODO: This is here because I left it here so deal with it. Jokes aside it was for formatting leaving for a while.
             data = JSON.parse(data);
             
             data.forEach((item: any) => {
-              playlists.push({
-                  Playlist: item.name,
-                  CSR: item.details.Results[item.details.ResultCount - 1].Score.Csr,
-                  Rank: item.details.Results[item.details.ResultCount - 1].Rank
-              });
+                playlists.push({
+                    Playlist: item.name,
+                    CSR: item.details.Results[item.details.ResultCount - 1].Score.Csr,
+                    Rank: item.details.Results[item.details.ResultCount - 1].Rank
+                });
+                node.writeToFile("./cache", "leaderboardData", "json", JSON.stringify(playlists));
             });
-          });
-          return resolve(playlists);
         });
     }
-    });
 }

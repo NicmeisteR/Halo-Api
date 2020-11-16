@@ -73,54 +73,42 @@ exports.arena = arena;
  * @returns playlistName
  */
 function ranks(player, token) {
-    var _a, _b, _c, _d, _e;
     return __awaiter(this, void 0, void 0, function* () {
-        let query = {
-            playlists: {
-                "url": `https://www.haloapi.com/metadata/h5/metadata/playlists`,
-                "query": "playlists",
-                "function": null
-            },
-            csr: {
-                "url": `https://www.haloapi.com/metadata/h5/metadata/csr-designations`,
-                "query": "csr",
-                "function": null
-            }
-        };
         let playerPlaylist = player.Results[0].Result.ArenaStats.ArenaPlaylistStats;
-        let playlistList = yield helpers_1.get(token, query.playlists);
-        let csrDesignation = yield helpers_1.get(token, query.csr);
-        let playlistName = yield helpers_1.getPlaylistName(playerPlaylist, playlistList, csrDesignation);
-        let root = {
-            Gamertag: player.Results[0].Result.PlayerId.Gamertag,
-            Xp: player.Results[0].Result.Xp,
-            SpartanRank: player.Results[0].Result.SpartanRank,
-            HighestCsrAttained: {
-                Tier: (_a = player.Results[0].Result.ArenaStats.HighestCsrAttained) === null || _a === void 0 ? void 0 : _a.Tier,
-                DesignationId: (_b = player.Results[0].Result.ArenaStats.HighestCsrAttained) === null || _b === void 0 ? void 0 : _b.DesignationId,
-                Csr: (_c = player.Results[0].Result.ArenaStats.HighestCsrAttained) === null || _c === void 0 ? void 0 : _c.Csr,
-                PercentToNextTier: (_d = player.Results[0].Result.ArenaStats.HighestCsrAttained) === null || _d === void 0 ? void 0 : _d.PercentToNextTier,
-                Rank: (_e = player.Results[0].Result.ArenaStats.HighestCsrAttained) === null || _e === void 0 ? void 0 : _e.Rank,
-            },
-            Stats: {
-                TotalKills: player.Results[0].Result.ArenaStats.TotalKills,
-                TotalHeadshots: player.Results[0].Result.ArenaStats.TotalHeadshots,
-                TotalMeleeKills: player.Results[0].Result.ArenaStats.TotalMeleeKills,
-                TotalAssassinations: player.Results[0].Result.ArenaStats.TotalAssassinations,
-                TotalGroundPoundKills: player.Results[0].Result.ArenaStats.TotalGroundPoundKills,
-                TotalShoulderBashKills: player.Results[0].Result.ArenaStats.TotalShoulderBashKills,
-                TotalPowerWeaponKills: player.Results[0].Result.ArenaStats.TotalPowerWeaponKills,
-                TotalDeaths: player.Results[0].Result.ArenaStats.TotalDeaths,
-                TotalAssists: player.Results[0].Result.ArenaStats.TotalAssists,
-                TotalGamesCompleted: player.Results[0].Result.ArenaStats.TotalGamesCompleted,
-                TotalGamesWon: player.Results[0].Result.ArenaStats.TotalGamesWon,
-                TotalGamesLost: player.Results[0].Result.ArenaStats.TotalGamesLost,
-                TotalGamesTied: player.Results[0].Result.ArenaStats.TotalGamesTied,
-                TotalGrenadeKills: player.Results[0].Result.ArenaStats.TotalGrenadeKills,
-                TotalSpartanKills: player.Results[0].Result.ArenaStats.TotalSpartanKills,
-            },
-            TotalTimePlayed: player.Results[0].Result.ArenaStats.TotalTimePlayed,
-        };
+        let playlistList = yield get("https://haloapi.nicmeister.cloud/metadata");
+        // TODO: @nicmeister read metadata from cache
+        let csrDesignation = yield get("https://www.haloapi.com/metadata/h5/metadata/csr-designations");
+        let playlistName = yield helpers_1.getPlaylistName(playerPlaylist, playlistList.playlists, csrDesignation);
+        // let root = {
+        //     Gamertag: player.Results[0].Result.PlayerId.Gamertag,
+        //     Xp: player.Results[0].Result.Xp,
+        //     SpartanRank: player.Results[0].Result.SpartanRank,
+        //     HighestCsrAttained: {
+        //         Tier: player.Results[0].Result.ArenaStats.HighestCsrAttained?.Tier,
+        //         DesignationId: player.Results[0].Result.ArenaStats.HighestCsrAttained?.DesignationId,
+        //         Csr: player.Results[0].Result.ArenaStats.HighestCsrAttained?.Csr,
+        //         PercentToNextTier: player.Results[0].Result.ArenaStats.HighestCsrAttained?.PercentToNextTier,
+        //         Rank: player.Results[0].Result.ArenaStats.HighestCsrAttained?.Rank,
+        //     },
+        //     Stats: {
+        //         TotalKills: player.Results[0].Result.ArenaStats.TotalKills,
+        //         TotalHeadshots: player.Results[0].Result.ArenaStats.TotalHeadshots,
+        //         TotalMeleeKills: player.Results[0].Result.ArenaStats.TotalMeleeKills,
+        //         TotalAssassinations: player.Results[0].Result.ArenaStats.TotalAssassinations,
+        //         TotalGroundPoundKills: player.Results[0].Result.ArenaStats.TotalGroundPoundKills,
+        //         TotalShoulderBashKills: player.Results[0].Result.ArenaStats.TotalShoulderBashKills,
+        //         TotalPowerWeaponKills: player.Results[0].Result.ArenaStats.TotalPowerWeaponKills,
+        //         TotalDeaths: player.Results[0].Result.ArenaStats.TotalDeaths,
+        //         TotalAssists: player.Results[0].Result.ArenaStats.TotalAssists,
+        //         TotalGamesCompleted: player.Results[0].Result.ArenaStats.TotalGamesCompleted,
+        //         TotalGamesWon: player.Results[0].Result.ArenaStats.TotalGamesWon,
+        //         TotalGamesLost: player.Results[0].Result.ArenaStats.TotalGamesLost,
+        //         TotalGamesTied: player.Results[0].Result.ArenaStats.TotalGamesTied,
+        //         TotalGrenadeKills: player.Results[0].Result.ArenaStats.TotalGrenadeKills,
+        //         TotalSpartanKills: player.Results[0].Result.ArenaStats.TotalSpartanKills,
+        //     },
+        //     TotalTimePlayed: player.Results[0].Result.ArenaStats.TotalTimePlayed,
+        // };
         return new Promise((resolve, reject) => {
             resolve(playlistName);
         });
@@ -143,7 +131,7 @@ function xp(player) {
         let arena = helpers_1.numDecFormat((50000000 - xpCur) / 1800);
         let infection = helpers_1.numDecFormat((50000000 - xpCur) / 5000);
         let dateNow = new Date();
-        const dateDone = new Date("04/15/2021");
+        const dateDone = new Date("06/15/2021");
         // To calculate the time difference of two dates 
         let Difference_In_Time = dateDone.getTime() - dateNow.getTime();
         // To calculate the no. of days between two dates 
@@ -171,6 +159,24 @@ function xp(player) {
     });
 }
 exports.xp = xp;
+function get(query) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let player;
+        try {
+            player = yield node.get(query, ["ocp-apim-subscription-key", "f4bfe0061ba84032b87aeb1c00600dc3"]).then(console.log(`Retrieved Data.`));
+        }
+        catch (error) {
+            console.log(error);
+        }
+        finally {
+            return new Promise((resolve, reject) => {
+                player = JSON.parse(player);
+                return resolve(player);
+            });
+        }
+    });
+}
+exports.get = get;
 // export async function championstart(metaData: any){
 //     let CurrentLeaderboard:any = [];
 //     // metaData.forEach(async (item: any, i: number) => {
@@ -202,6 +208,7 @@ exports.xp = xp;
 //     return;
 // }
 function championstart(metaData) {
+    console.log("metadata", metaData);
     let CurrentLeaderboard = [];
     metaData.playlists.forEach((playlist, i) => {
         setTimeout(() => {
